@@ -14,10 +14,6 @@ Built with Flutter, it offers seamless usability, compliance support, and rich m
 - Sorting, filtering, and comprehensive fund comparison
 - Secure transaction capabilities (planned)
 
-## Getting Started
-
-This project is a complete starting point for a Flutter application supporting both Android and iOS platforms.
-
 ### Resources
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
