@@ -1,28 +1,18 @@
 import 'package:flutter/material.dart';
 import 'theme/theme.dart';
-import 'screens/dashboard_screen.dart';
+import 'screens/main_home.dart'; // New main nav file
 
-void main() {
-  runApp(const MutualFundApp());
-}
+void main() => runApp(const MyApp());
 
-class MutualFundApp extends StatelessWidget {
-  const MutualFundApp({super.key});
-
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mutual Fund Dashboard',
+      title: 'My MF App',
       debugShowCheckedModeBanner: false,
-
-      // 🔹 Currently only Dark theme (Brown & Maroon)
       theme: AppTheme.darkTheme,
-
-      // If you later add light theme in AppTheme:
-      // darkTheme: AppTheme.darkTheme,
-      // themeMode: ThemeMode.system, // Auto-switch based on OS setting
-
-      home: const DashboardScreen(),
+      home: const MainHome(), // <-- show bottom nav
     );
   }
 }

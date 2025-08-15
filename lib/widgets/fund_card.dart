@@ -37,9 +37,10 @@ class FundCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       margin: const EdgeInsets.symmetric(vertical: 6),
       color: isSelected
-          ? AppTheme.accentGrey.withOpacity(0.25) // slightly lighter when selected
+          ? AppTheme.accentGrey.withValues(alpha: 64) // slightly lighter when selected
           : AppTheme.cardGrey, // normal lighter black card color
-      elevation: 3,
+      elevation: 6,
+      shadowColor: Colors.black54,
       child: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Column(
