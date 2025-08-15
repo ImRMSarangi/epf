@@ -1,16 +1,31 @@
-# epf
+# Mutual Fund Analysis App
 
-A new Flutter project.
+A cross-platform (Android & iOS) Flutter application for advanced analysis and management of Indian mutual fund investments.
+
+## Project Overview
+
+This app empowers Indian investors with professional-grade tools for tracking, analyzing, and comparing mutual fund holdings.
+Built with Flutter, it offers seamless usability, compliance support, and rich market data integration.
+
+## Key Features
+
+- Analyze Indian mutual fund holdings with premium dashboards
+- Interactive charts and risk profile visualizations
+- Sorting, filtering, and comprehensive fund comparison
+- Secure transaction capabilities (planned)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a complete starting point for a Flutter application supporting both Android and iOS platforms.
 
-A few resources to get you started if this is your first Flutter project:
+### Resources
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Official Flutter [documentation](https://docs.flutter.dev/)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Setup Instructions
+
+1. Install Flutter SDK and Android Studio/VS Code
+2. Run `flutter pub get` to fetch dependencies
+3. Use `flutter run` to launch the app on your connected device/emulator
