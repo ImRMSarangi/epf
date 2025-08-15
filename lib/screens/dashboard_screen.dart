@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../services/fund_service.dart';
 import '../models/dashboard_data.dart';
@@ -71,106 +70,85 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return double.tryParse(returnStr.replaceAll('+', '').replaceAll('%', '')) ?? 0.0;
   }
 
-  /// Show filter/sort modal bottom sheet
-  void _showSelectionModal({
+  /// Build the filter/sort bar
+  Widget _buildFilterSortBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Tooltip(
+            message: 'Filter by Risk',
+            child: IconButton(
+              icon: const Icon(Icons.filter_alt_rounded, color: Colors.white),
+              onPressed: () => _showSelectionDialog(
+                title: 'Filter by Risk',
+                options: riskOptions,
+                currentValue: selectedRisk,
+                onSelected: (val) {
+                  setState(() { selectedRisk = val; });
+                  applyFiltersAndSort();
+                },
+              ),
+            ),
+          ),
+          Tooltip(
+            message: 'Sort',
+            child: IconButton(
+              icon: const Icon(Icons.sort_rounded, color: Colors.white),
+              onPressed: () => _showSelectionDialog(
+                title: 'Sort by',
+                options: sortOptions,
+                currentValue: selectedSort,
+                onSelected: (val) {
+                  setState(() { selectedSort = val; });
+                  applyFiltersAndSort();
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSelectionDialog({
     required String title,
     required List<String> options,
     required String currentValue,
     required Function(String) onSelected,
   }) {
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      backgroundColor: const Color(0xFF181A20),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.cardGrey,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                ...options.map((opt) {
-                  final isSelected = opt == currentValue;
-                  return ListTile(
-                    title: Text(
-                      opt,
-                      style: TextStyle(
-                        color: isSelected ? AppTheme.accentOrange : Colors.white,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      ),
+              children: options.map((opt) {
+                final isSelected = opt == currentValue;
+                return ListTile(
+                  title: Text(
+                    opt,
+                    style: TextStyle(
+                      color: isSelected ? AppTheme.accentOrange : Colors.white,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
-                    onTap: () {
-                      onSelected(opt);
-                      Navigator.pop(context);
-                      applyFiltersAndSort();
-                    },
-                  );
-                }),
-              ],
+                  ),
+                  trailing: isSelected ? const Icon(Icons.check, color: Colors.white) : null,
+                  onTap: () {
+                    Navigator.pop(context);
+                    onSelected(opt);
+                  },
+                );
+              }).toList(),
             ),
           ),
         );
       },
-    );
-  }
-
-  /// Build the filter/sort bar
-  Widget _buildFilterSortBar() {
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.white24),
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              _showSelectionModal(
-                title: 'Filter by Risk',
-                options: riskOptions,
-                currentValue: selectedRisk,
-                onSelected: (val) {
-                  setState(() {
-                    selectedRisk = val;
-                  });
-                },
-              );
-            },
-            icon: const Icon(Icons.filter_list, size: 18),
-            label: Text(selectedRisk),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.white24),
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              _showSelectionModal(
-                title: 'Sort by',
-                options: sortOptions,
-                currentValue: selectedSort,
-                onSelected: (val) {
-                  setState(() {
-                    selectedSort = val;
-                  });
-                },
-              );
-            },
-            icon: const Icon(Icons.sort, size: 18),
-            label: Text(selectedSort),
-          ),
-        ),
-      ],
     );
   }
 
