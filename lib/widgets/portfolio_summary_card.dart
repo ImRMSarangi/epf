@@ -4,6 +4,7 @@ import '../models/dashboard_data.dart';
 
 class PortfolioSummaryCard extends StatelessWidget {
   final DashboardData data;
+
   const PortfolioSummaryCard({super.key, required this.data});
 
   String formatNumber(double value) {
@@ -14,9 +15,9 @@ class PortfolioSummaryCard extends StatelessWidget {
   }
 
   Color getReturnColor(String returnStr) {
-    if (returnStr.startsWith('+')) return AppTheme.accentBurntSienna;
-    if (returnStr.startsWith('-')) return AppTheme.accentBurntSienna;
-    return Colors.grey.shade400;
+    if (returnStr.startsWith('+')) return AppTheme.accentGreen;
+    if (returnStr.startsWith('-')) return AppTheme.accentRed;
+    return AppTheme.accentGrey;
   }
 
   @override
@@ -24,21 +25,12 @@ class PortfolioSummaryCard extends StatelessWidget {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Container(
+      color: AppTheme.backgroundBlack, // Pitch black for the big top card
+      child: Padding(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.indigo.shade700, Colors.indigo.shade400],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Total Portfolio",
-                style: TextStyle(fontSize: 18, color: Colors.white70)),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,7 +39,7 @@ class PortfolioSummaryCard extends StatelessWidget {
                 _buildStat("Current", formatNumber(data.totalCurrent), Colors.white),
                 _buildStat("Return", data.totalReturn, getReturnColor(data.totalReturn)),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -58,13 +50,11 @@ class PortfolioSummaryCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: TextStyle(color: Colors.white70, fontSize: 14)),
+        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 14)),
         const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.bold, color: color),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color),
         ),
       ],
     );

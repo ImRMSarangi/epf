@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../theme/theme.dart';
-
 import '../models/fund.dart';
 
 class FundCard extends StatelessWidget {
@@ -18,23 +16,19 @@ class FundCard extends StatelessWidget {
   }
 
   Color getReturnColor(String returnStr) {
-    if (returnStr.startsWith('+')) {
-      return Colors.greenAccent;  // green for positive
-    }
-    if (returnStr.startsWith('-')) {
-      return Colors.redAccent;    // red for negative
-    }
-    return Colors.grey.shade400;
+    if (returnStr.startsWith('+')) return AppTheme.accentGreen;
+    if (returnStr.startsWith('-')) return AppTheme.accentRed;
+    return AppTheme.accentGrey;
   }
 
   Icon getReturnIcon(String returnStr) {
     if (returnStr.startsWith('+')) {
-      return Icon(Icons.arrow_upward, color: Colors.greenAccent, size: 18);
+      return Icon(Icons.arrow_upward, color: AppTheme.accentGreen, size: 18);
     }
     if (returnStr.startsWith('-')) {
-      return Icon(Icons.arrow_downward, color: Colors.redAccent, size: 18);
+      return Icon(Icons.arrow_downward, color: AppTheme.accentRed, size: 18);
     }
-    return Icon(Icons.remove, color: Colors.grey.shade500, size: 18);
+    return Icon(Icons.remove, color: AppTheme.accentGrey, size: 18);
   }
 
   @override
@@ -43,8 +37,8 @@ class FundCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       margin: const EdgeInsets.symmetric(vertical: 6),
       color: isSelected
-          ? AppTheme.accentBurntSienna.withOpacity(0.85)  // highlighted card bg
-          : Colors.transparent,  // default transparent
+          ? AppTheme.accentGrey.withOpacity(0.25) // slightly lighter when selected
+          : AppTheme.cardGrey, // normal lighter black card color
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -56,7 +50,7 @@ class FundCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: isSelected ? Colors.white : AppTheme.accentBurntSienna,
+                color: isSelected ? AppTheme.accentOrange : Colors.white,
               ),
             ),
             const SizedBox(height: 12),
@@ -93,7 +87,7 @@ class FundCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
         ),
         const SizedBox(height: 2),
         Text(

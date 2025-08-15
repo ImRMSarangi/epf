@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // For professional font in AppBar
+import 'package:google_fonts/google_fonts.dart';
+
 import '../services/fund_service.dart';
 import '../models/dashboard_data.dart';
 import '../models/fund.dart';
@@ -11,7 +12,7 @@ class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
@@ -23,6 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String selectedRisk = 'All';
   String selectedSort = 'Return (High→Low)';
 
+  // Filter and sort options
   final riskOptions = ['All', 'Low', 'Moderate', 'High'];
   final sortOptions = ['Return (High→Low)', 'Return (Low→High)', 'Name (A→Z)'];
 
@@ -32,6 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     loadData();
   }
 
+  /// Fetch data on initialization
   Future<void> loadData() async {
     final data = await _fundService.fetchDashboardData();
     setState(() {
@@ -41,15 +44,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  /// Filter and sort the displayed funds
   void applyFiltersAndSort() {
     List<Fund> funds = List.from(dashboardData.funds);
 
-    // Filter funds by risk
+    // Filter by risk
     if (selectedRisk != 'All') {
       funds = funds.where((f) => f.risk.toLowerCase() == selectedRisk.toLowerCase()).toList();
     }
 
-    // Sort funds by selected criteria
+    // Sort based on selected criteria
     if (selectedSort == 'Return (High→Low)') {
       funds.sort((a, b) => _parseReturn(b.returnRate).compareTo(_parseReturn(a.returnRate)));
     } else if (selectedSort == 'Return (Low→High)') {
@@ -67,6 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return double.tryParse(returnStr.replaceAll('+', '').replaceAll('%', '')) ?? 0.0;
   }
 
+  /// Show filter/sort modal bottom sheet
   void _showSelectionModal({
     required String title,
     required List<String> options,
@@ -75,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1C1F2E),
+      backgroundColor: const Color(0xFF181A20),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -86,20 +91,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(title,
-                    style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 12),
                 ...options.map((opt) {
                   final isSelected = opt == currentValue;
                   return ListTile(
-                    title: Text(opt,
-                        style: TextStyle(
-                          color: isSelected ? AppTheme.accentBurntSienna : Colors.white,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        )),
+                    title: Text(
+                      opt,
+                      style: TextStyle(
+                        color: isSelected ? AppTheme.accentOrange : Colors.white,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
                     onTap: () {
                       onSelected(opt);
                       Navigator.pop(context);
+                      applyFiltersAndSort();
                     },
                   );
                 }),
@@ -111,13 +121,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  /// Build the filter/sort bar
   Widget _buildFilterSortBar() {
     return Row(
       children: [
         Expanded(
           child: OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.grey.shade600),
+              side: BorderSide(color: Colors.white24),
               foregroundColor: Colors.white,
             ),
             onPressed: () {
@@ -126,8 +137,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 options: riskOptions,
                 currentValue: selectedRisk,
                 onSelected: (val) {
-                  selectedRisk = val;
-                  applyFiltersAndSort();
+                  setState(() {
+                    selectedRisk = val;
+                  });
                 },
               );
             },
@@ -139,7 +151,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Expanded(
           child: OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.grey.shade600),
+              side: BorderSide(color: Colors.white24),
               foregroundColor: Colors.white,
             ),
             onPressed: () {
@@ -148,8 +160,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 options: sortOptions,
                 currentValue: selectedSort,
                 onSelected: (val) {
-                  selectedSort = val;
-                  applyFiltersAndSort();
+                  setState(() {
+                    selectedSort = val;
+                  });
                 },
               );
             },
@@ -164,27 +177,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Make scaffold background transparent
-      appBar: AppBar(
-        title: Text(
-          'My ePF',
-          style: GoogleFonts.gabarito(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            color: Colors.white,
-          ),
-        ),
-      ),
+      backgroundColor: AppTheme.backgroundBlack, // Pitch black background
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF0A0E21), Color(0xFF1D1F33)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+        color: AppTheme.backgroundBlack,
         child: isLoading
             ? const Center(child: CircularProgressIndicator(color: Colors.white))
             : SafeArea(
@@ -210,7 +207,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: FundCard(fund: fund),
                           ),
                         ),
-                        // Optional: add Spacer() here if you want content centered when few items
                       ],
                     ),
                   ),
